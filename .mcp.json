@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "cvfacile": {
+      "command": "python3",
+      "args": ["cvfacile", "mcp"]
+    }
+  }
+}

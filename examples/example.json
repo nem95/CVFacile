@@ -1,0 +1,379 @@
+{
+  "$schema": "../schema/cv.schema.json",
+  "template": "sidebar",
+  "lang": "en",
+  "basics": {
+    "name": "Alex Morel",
+    "label": {
+      "fr": "Développeur Full-Stack • Orienté Front-End",
+      "en": "Full-Stack Engineer • Front-End Focus"
+    },
+    "photo": "photo.jpg",
+    "email": "alex.morel@example.com",
+    "phone": "+33 6 00 00 00 00",
+    "location": "Lyon, France",
+    "github": "nem95",
+    "linkedin": "alex-morel",
+    "summary": {
+      "fr": "Développeur Full-Stack orienté front-end avec **plus de 6 ans** d'expérience en TypeScript (React, Next.js, Node.js). Je conçois des **interfaces performantes, accessibles et maintenables**, et je développe aussi les fonctionnalités backend qui vont avec. Habitué à travailler avec les équipes produit et design, avec une forte exigence de qualité (code reviews, pair programming, design systems). Je lance aussi mes propres produits.",
+      "en": "Full-Stack Engineer with a front-end focus and **6+ years** of experience in TypeScript (React, Next.js, Node.js). I build **performant, accessible and maintainable interfaces**, and I am comfortable shipping the backend features behind them. Used to working closely with product and design teams, with a strong focus on code quality (reviews, pair programming, design systems). I also ship my own products."
+    }
+  },
+  "work": [
+    {
+      "position": {
+        "fr": "Développeur Full-Stack",
+        "en": "Full-Stack Engineer"
+      },
+      "company": "Fleetwise",
+      "location": "Lyon",
+      "dates": {
+        "fr": "Juil. 2024 - Nov. 2025",
+        "en": "Jul. 2024 - Nov. 2025"
+      },
+      "highlights": {
+        "fr": [
+          "**Pilotage de la refonte front-end de la plateforme Pro** (React, TypeScript) permettant aux clients professionnels de gérer leurs livraisons.",
+          "**Standardisation des parcours métier** : passage d'une logique au cas par cas à des parcours utilisateurs unifiés, réduisant la complexité fonctionnelle.",
+          "Développement de **nouvelles pages de bout en bout**, de l'interface React aux fonctionnalités des microservices Node.js de la squad.",
+          "Participation à la conception et au développement d'un **back-office centralisé** remplaçant deux outils historiques et des scripts Apps Script.",
+          "Contributeur clé du **UI Kit** interne : nouveaux composants, améliorations et documentation."
+        ],
+        "en": [
+          "**Led the front-end redesign of the Pro platform** (React, TypeScript) used by business clients to book and manage their deliveries.",
+          "**Standardized business flows**: moved from case-by-case logic to unified user journeys, reducing functional complexity.",
+          "**Built new pages end-to-end**, from the React UI to the features needed in the squad's Node.js microservices.",
+          "Contributed to the design and development of a **centralized back office** replacing two legacy tools and Apps Script scripts.",
+          "Key contributor to the internal **UI Kit**: new components, improvements and documentation."
+        ]
+      }
+    },
+    {
+      "position": {
+        "fr": "Développeur Front-End",
+        "en": "Front-End Engineer"
+      },
+      "company": "Semantica",
+      "location": "Bordeaux",
+      "dates": {
+        "fr": "Oct. 2020 - Juil. 2024",
+        "en": "Oct. 2020 - Jul. 2024"
+      },
+      "highlights": {
+        "fr": [
+          "Développement et évolution d'une **plateforme data & analytics** (insights, reporting, ciblage sémantique) pendant près de 4 ans.",
+          "Création d'une **plateforme d'insights avec data visualisation** : les clients explorent les catégories sémantiques, les prospects estiment leur audience potentielle.",
+          "Transformation de données complexes en **interfaces claires et actionnables**.",
+          "Contribution aux **microservices NestJS** et onboarding des nouveaux développeurs."
+        ],
+        "en": [
+          "Developed and evolved a **data & analytics platform** (insights, reporting, semantic targeting) over nearly 4 years.",
+          "Built an **insights platform with data visualizations**: clients explore semantic content categories, prospects estimate their potential audience.",
+          "Turned complex data into **clear, actionable interfaces**.",
+          "Contributed to **NestJS microservices** and onboarded new developers."
+        ]
+      }
+    },
+    {
+      "position": {
+        "fr": "Développeur Front-End",
+        "en": "Front-End Engineer"
+      },
+      "company": "Streamly",
+      "location": "Nantes",
+      "dates": {
+        "fr": "Sept. 2018 - Août 2019",
+        "en": "Sep. 2018 - Aug. 2019"
+      },
+      "highlights": {
+        "fr": [
+          "Développement du site vitrine et de la plateforme (inscription, dashboard streamer, profils) avec **Apollo GraphQL**, et d'une **librairie de composants réutilisables**."
+        ],
+        "en": [
+          "Built the marketing website and the platform (sign-up, streamer dashboard, profiles) with **Apollo GraphQL**, plus a **reusable component library**."
+        ]
+      }
+    }
+  ],
+  "projects": [
+    {
+      "name": "Numerobis",
+      "url": "https://numerobis.app",
+      "keywords": [
+        "Next.js",
+        "TypeScript",
+        "Supabase",
+        "Tailwind CSS",
+        "PostHog"
+      ],
+      "description": {
+        "fr": "Comparateur SaaS d'agences de gestion locative pour bailleurs. Front Next.js orienté SEO.",
+        "en": "SaaS comparison platform helping French landlords compare property management agencies. SEO-driven Next.js front end."
+      }
+    },
+    {
+      "name": "CatchFish",
+      "kind": {
+        "en": "[catchfish.fr](https://catchfish.fr/) • iOS / Android app",
+        "fr": "[catchfish.fr](https://catchfish.fr/) • App iOS / Android"
+      },
+      "keywords": [
+        "React Native (Expo)",
+        "NativeWind",
+        "NestJS",
+        "PostgreSQL",
+        "TypeORM",
+        "Docker",
+        "Cloudflare R2",
+        "PostHog"
+      ],
+      "description": {
+        "fr": "« FishDex » gamifié pour les plongeurs : on décrit un poisson, l'IA identifie l'espèce, on l'ajoute à sa collection. API NestJS avec Google OAuth, uploads R2, Docker sur Dokploy.",
+        "en": "Gamified “FishDex” for snorkelers: describe a fish, AI identifies the species, add it to your collection. NestJS API with Google OAuth, R2 uploads, Docker on Dokploy."
+      }
+    },
+    {
+      "name": "CLAI",
+      "kind": {
+        "en": "[Chrome extension](https://chromewebstore.google.com/detail/clai-cover-letter-ai/lpncnfcjomkpmmjcppdddpplokohjdfg)",
+        "fr": "[Extension Chrome](https://chromewebstore.google.com/detail/clai-cover-letter-ai/lpncnfcjomkpmmjcppdddpplokohjdfg)"
+      },
+      "keywords": [
+        "React",
+        "Tailwind CSS",
+        "TanStack Query",
+        "Express",
+        "PostgreSQL",
+        "OpenRouter",
+        "PostHog"
+      ],
+      "description": {
+        "fr": "Générateur de lettres de motivation par IA pour les job boards (Welcome to the Jungle, LinkedIn). UI React, auth JWT, proxy IA et abonnements payants.",
+        "en": "AI cover letter generator for job boards (Welcome to the Jungle, LinkedIn). React extension UI, JWT auth, AI proxy and paid subscriptions."
+      }
+    },
+    {
+      "name": "Meeple",
+      "kind": {
+        "fr": "« Le Strava des jeux de société »",
+        "en": "“Strava for board games”"
+      },
+      "keywords": [
+        "React Native (Expo)",
+        "Next.js",
+        "NestJS",
+        "PostgreSQL",
+        "Cloudflare R2",
+        "PostHog"
+      ],
+      "description": {
+        "fr": "Les joueurs enregistrent leurs parties et obtiennent stats et classements TrueSkill. App mobile, app web Next.js avec graphiques et moteur de scoring générique.",
+        "en": "Players log board game sessions and get stats and TrueSkill rankings. Mobile app, Next.js web app with charts, and a generic scoring engine."
+      }
+    }
+  ],
+  "skills": [
+    {
+      "name": "Frontend & Mobile",
+      "keywords": {
+        "fr": [
+          "React",
+          "Next.js",
+          "React Native (Expo)",
+          "TypeScript",
+          "Tailwind CSS",
+          "TanStack Query",
+          "Zustand",
+          "Storybook",
+          "Design systems",
+          "UI Kits",
+          "Accessibilité",
+          "Performance web"
+        ],
+        "en": [
+          "React",
+          "Next.js",
+          "React Native (Expo)",
+          "TypeScript",
+          "Tailwind CSS",
+          "TanStack Query",
+          "Zustand",
+          "Storybook",
+          "Design systems",
+          "UI Kits",
+          "Accessibility",
+          "Web performance"
+        ]
+      }
+    },
+    {
+      "name": "Backend & Data",
+      "keywords": {
+        "fr": [
+          "Node.js",
+          "NestJS",
+          "Express",
+          "GraphQL (Apollo)",
+          "API REST",
+          "PostgreSQL"
+        ],
+        "en": [
+          "Node.js",
+          "NestJS",
+          "Express",
+          "GraphQL (Apollo)",
+          "REST APIs",
+          "PostgreSQL"
+        ]
+      }
+    },
+    {
+      "name": {
+        "fr": "Tests & Qualité",
+        "en": "Testing & Quality"
+      },
+      "keywords": [
+        "Jest",
+        "React Testing Library",
+        "Playwright",
+        "Vitest",
+        "Code reviews",
+        "Pair programming"
+      ]
+    },
+    {
+      "name": "DevOps & Cloud",
+      "keywords": {
+        "fr": [
+          "Docker",
+          "CI/CD",
+          "Git",
+          "Vercel",
+          "Cloudflare (DNS, stockage R2)",
+          "Sentry",
+          "Datadog"
+        ],
+        "en": [
+          "Docker",
+          "CI/CD",
+          "Git",
+          "Vercel",
+          "Cloudflare (DNS, R2 storage)",
+          "Sentry",
+          "Datadog"
+        ]
+      }
+    },
+    {
+      "name": {
+        "fr": "IA & Outils",
+        "en": "AI & Tooling"
+      },
+      "keywords": {
+        "fr": [
+          "Claude Code",
+          "Intégration d'API LLM via OpenRouter"
+        ],
+        "en": [
+          "Claude Code",
+          "LLM API integration via OpenRouter"
+        ]
+      }
+    },
+    {
+      "name": {
+        "fr": "Méthodes",
+        "en": "Methods"
+      },
+      "keywords": [
+        "Figma",
+        "Agile / Scrum",
+        "Analytics (PostHog)"
+      ]
+    },
+    {
+      "name": "Soft skills",
+      "keywords": {
+        "fr": [
+          "Collaboration produit & design",
+          "Communication inter-équipes",
+          "Mentorat"
+        ],
+        "en": [
+          "Product & design collaboration",
+          "Cross-team communication",
+          "Mentoring"
+        ]
+      }
+    }
+  ],
+  "languages": [
+    {
+      "language": {
+        "fr": "Français",
+        "en": "French"
+      },
+      "fluency": {
+        "fr": "Langue maternelle",
+        "en": "Native"
+      }
+    },
+    {
+      "language": {
+        "fr": "Anglais",
+        "en": "English"
+      },
+      "fluency": {
+        "fr": "Professionnel",
+        "en": "Professional"
+      }
+    },
+    {
+      "language": {
+        "fr": "Espagnol",
+        "en": "Spanish"
+      },
+      "fluency": {
+        "fr": "Débutant",
+        "en": "Beginner"
+      }
+    }
+  ],
+  "education": [
+    {
+      "degree": {
+        "fr": "Master Ingénierie Web & Mobile",
+        "en": "Master's in Web & Mobile Engineering"
+      },
+      "institution": "École Supérieure du Numérique",
+      "location": "Lille",
+      "dates": "2017 - 2019"
+    },
+    {
+      "degree": {
+        "fr": "Baccalauréat scientifique",
+        "en": "Baccalauréat, Science track"
+      },
+      "location": "Lycée Victor Hugo, Lille",
+      "dates": "2013 - 2014"
+    }
+  ],
+  "variants": {
+    "no-phone": {
+      "hide": [
+        "phone"
+      ]
+    },
+    "backend": {
+      "basics": {
+        "label": {
+          "en": "Back-End Engineer",
+          "fr": "Développeur Back-End"
+        }
+      },
+      "hide": [
+        "projects"
+      ]
+    }
+  }
+}

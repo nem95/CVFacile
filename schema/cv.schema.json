@@ -1,0 +1,156 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cvfacile.dev/schema/cv.schema.json",
+  "title": "CVfacile CV",
+  "description": "CVfacile CV format. Any text field can be translated: { \"en\": \"...\", \"fr\": \"...\" }. Inline formatting in text: **bold** and [link](https://...).",
+  "type": "object",
+  "required": ["basics"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "template": { "type": "string", "description": "Template to use (default: sidebar)." },
+    "lang": { "type": "string", "pattern": "^[a-z]{2}$", "description": "Default language, e.g. en." },
+    "hide": { "$ref": "#/$defs/hide" },
+    "theme": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "accent": { "$ref": "#/$defs/color", "description": "Accent color (default: 2F5D8A)." },
+        "sidebar": { "$ref": "#/$defs/color", "description": "Sidebar background (default: F1F4F8)." }
+      }
+    },
+    "labels": {
+      "description": "Override the template's section titles, e.g. { \"projects\": \"Side projects\" }.",
+      "oneOf": [{ "$ref": "#/$defs/labels" }, { "type": "object", "additionalProperties": { "$ref": "#/$defs/labels" } }]
+    },
+    "basics": {
+      "type": "object",
+      "required": ["name"],
+      "additionalProperties": false,
+      "properties": {
+        "name": { "type": "string", "description": "First and last name. The last word is shown in the accent color." },
+        "label": { "$ref": "#/$defs/text", "description": "Title under the name, e.g. Full-Stack Engineer." },
+        "photo": { "type": "string", "description": "Photo path, relative to the CV file." },
+        "email": { "type": "string" },
+        "phone": { "type": "string" },
+        "location": { "$ref": "#/$defs/text" },
+        "website": { "type": "string", "description": "Full URL." },
+        "github": { "type": "string", "description": "Username or URL." },
+        "linkedin": { "type": "string", "description": "Profile id (linkedin.com/in/<id>) or URL." },
+        "summary": { "$ref": "#/$defs/text", "description": "Introduction paragraph." }
+      }
+    },
+    "work": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["position", "company"],
+        "additionalProperties": false,
+        "properties": {
+          "position": { "$ref": "#/$defs/text" },
+          "company": { "$ref": "#/$defs/text" },
+          "location": { "$ref": "#/$defs/text" },
+          "dates": { "$ref": "#/$defs/text", "description": "Free text, e.g. Jul. 2024 - Nov. 2025." },
+          "highlights": { "$ref": "#/$defs/textList" }
+        }
+      }
+    },
+    "projects": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "$ref": "#/$defs/text" },
+          "kind": { "$ref": "#/$defs/text", "description": "Subtitle, e.g. iOS / Android app. Defaults to the URL." },
+          "url": { "type": "string" },
+          "description": { "$ref": "#/$defs/text" },
+          "keywords": { "$ref": "#/$defs/textList", "description": "Technologies, shown in italics." }
+        }
+      }
+    },
+    "education": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["degree"],
+        "additionalProperties": false,
+        "properties": {
+          "degree": { "$ref": "#/$defs/text" },
+          "institution": { "$ref": "#/$defs/text" },
+          "location": { "$ref": "#/$defs/text" },
+          "dates": { "$ref": "#/$defs/text" }
+        }
+      }
+    },
+    "skills": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "$ref": "#/$defs/text" },
+          "keywords": { "$ref": "#/$defs/textList" }
+        }
+      }
+    },
+    "languages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["language"],
+        "additionalProperties": false,
+        "properties": {
+          "language": { "$ref": "#/$defs/text" },
+          "fluency": { "$ref": "#/$defs/text" }
+        }
+      }
+    },
+    "variants": {
+      "type": "object",
+      "description": "CV variants: each variant patches the base CV. Objects are merged, lists replaced. E.g. { \"no-phone\": { \"hide\": [\"phone\"] } }.",
+      "additionalProperties": {
+        "type": "object",
+        "properties": { "hide": { "$ref": "#/$defs/hide" } }
+      }
+    }
+  },
+  "$defs": {
+    "localized": {
+      "type": "object",
+      "propertyNames": { "pattern": "^[a-z]{2}$" },
+      "minProperties": 1
+    },
+    "text": {
+      "oneOf": [
+        { "type": "string" },
+        { "allOf": [{ "$ref": "#/$defs/localized" }, { "additionalProperties": { "type": "string" } }] }
+      ]
+    },
+    "textList": {
+      "oneOf": [
+        { "type": "array", "items": { "$ref": "#/$defs/text" } },
+        { "allOf": [{ "$ref": "#/$defs/localized" }, { "additionalProperties": { "type": "array", "items": { "type": "string" } } }] }
+      ]
+    },
+    "color": { "type": "string", "pattern": "^#?[0-9A-Fa-f]{6}$" },
+    "hide": {
+      "type": "array",
+      "description": "Fields or sections to hide.",
+      "items": {
+        "enum": ["email", "phone", "location", "website", "github", "linkedin", "photo",
+                 "summary", "work", "projects", "education", "skills", "languages"]
+      }
+    },
+    "labels": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "contact": { "type": "string" }, "languages": { "type": "string" }, "skills": { "type": "string" },
+        "education": { "type": "string" }, "work": { "type": "string" }, "projects": { "type": "string" }
+      }
+    }
+  }
+}
