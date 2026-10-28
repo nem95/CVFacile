@@ -27,23 +27,20 @@ def load(path) -> dict:
     path = Path(path)
     if not path.is_file():
         raise CVError("File not found: %s" % path)
-    text = path.read_text(encoding="utf-8")
     suffix = path.suffix.lower()
+    if suffix == ".json":
+        parse = json.loads
+    elif suffix in (".yaml", ".yml"):
+        try:
+            import yaml  # optional dependency
+        except ImportError:
+            raise CVError("YAML files need PyYAML (pip install pyyaml). JSON works with no dependency.")
+        parse = yaml.safe_load
+    else:
+        raise CVError("Unsupported format: %s (use .json, .yaml or .yml)" % suffix)
     try:
-        if suffix == ".json":
-            data = json.loads(text)
-        elif suffix in (".yaml", ".yml"):
-            try:
-                import yaml  # optional dependency
-            except ImportError:
-                raise CVError("YAML files need PyYAML (pip install pyyaml). "
-                              "JSON works with no dependency.")
-            data = yaml.safe_load(text)
-        else:
-            raise CVError("Unsupported format: %s (use .json, .yaml or .yml)" % suffix)
-    except (ValueError, Exception) as e:
-        if isinstance(e, CVError):
-            raise
+        data = parse(path.read_text(encoding="utf-8"))
+    except Exception as e:  # JSON, YAML and encoding errors all become a readable message
         raise CVError("Cannot read %s: %s" % (path.name, e))
     if not isinstance(data, dict):
         raise CVError("The file must contain an object at the root.")
@@ -96,6 +93,7 @@ def localize(node, lang, missing=None, path="$"):
 
 
 def deep_merge(base, override):
+    """Merge dicts recursively; any other value (lists included) is replaced."""
     if isinstance(base, dict) and isinstance(override, dict):
         out = dict(base)
         for k, v in override.items():
@@ -122,10 +120,9 @@ def resolve(data: dict, lang: str, variant=None, hide=()):
     cv = localize(data, lang, missing)
     basics = cv.setdefault("basics", {})
     for key in hidden:
-        basics.pop(key, None)
-        if key in SECTIONS and key != "summary":
+        basics.pop(key, None)  # contact fields, photo and summary live in "basics"
+        if key in SECTIONS:
             cv.pop(key, None)
-    cv["_hidden"] = sorted(hidden)
     return cv, missing
 
 
@@ -172,7 +169,19 @@ def _check_text_list(issues, value, path):
         _check_text(issues, v, "%s[%d]" % (path, i), required=True)
 
 
+def _check_hide(issues, hide, path):
+    if hide is None:
+        return
+    if not isinstance(hide, list):
+        issues.append(_issue("error", path, "Must be a list."))
+        return
+    for h in hide:
+        if h not in HIDEABLE:
+            issues.append(_issue("warning", path, "Unknown value: %s" % h))
+
+
 def validate_resolved(cv: dict, base_dir: Path) -> list:
+    """Check one resolved CV (a single language and variant)."""
     issues = []
     for key in cv:
         if key not in TOP_LEVEL and not key.startswith("_"):
@@ -235,20 +244,17 @@ def validate_resolved(cv: dict, base_dir: Path) -> list:
 def validate(data: dict, base_dir: Path) -> list:
     """Check the base CV and every variant, in every language used by the file."""
     issues = []
-    hide = data.get("hide") or []
     variants = data.get("variants") or {}
-    if not isinstance(hide, list):
-        issues.append(_issue("error", "$.hide", "Must be a list."))
     if not isinstance(variants, dict):
         issues.append(_issue("error", "$.variants", "Must be an object { name: changes }."))
         variants = {}
+    _check_hide(issues, data.get("hide"), "$.hide")
     for name, patch in variants.items():
-        for h in (patch.get("hide") or []) if isinstance(patch, dict) else []:
-            if h not in HIDEABLE:
-                issues.append(_issue("warning", "$.variants.%s.hide" % name, "Unknown value: %s" % h))
-    for h in hide if isinstance(hide, list) else []:
-        if h not in HIDEABLE:
-            issues.append(_issue("warning", "$.hide", "Unknown value: %s" % h))
+        if isinstance(patch, dict):
+            _check_hide(issues, patch.get("hide"), "$.variants.%s.hide" % name)
+        else:
+            issues.append(_issue("error", "$.variants.%s" % name, "Must be an object."))
+    # Resolving needs well-formed "hide" and "variants": stop here otherwise.
     if any(i["level"] == "error" for i in issues):
         return issues
 
@@ -272,3 +278,10 @@ def validate(data: dict, base_dir: Path) -> list:
                 issue["message"] = where + issue["message"] if variant or len(langs) > 1 else issue["message"]
                 issues.append(issue)
     return issues
+
+
+def check(path) -> dict:
+    """Load and validate a CV file: {"ok": bool, "issues": [...]}."""
+    path = Path(path).resolve()
+    issues = validate(load(path), path.parent)
+    return {"ok": not any(i["level"] == "error" for i in issues), "issues": issues}

@@ -62,12 +62,15 @@ def pick_engine(preference="auto"):
 
 
 def _compile(engine, exe, workdir: Path, tex_name: str):
-    pdflatex = "pdflatex -interaction=nonstopmode -halt-on-error %s" % tex_name
+    """Run the engine in workdir. Returns None on success, else the engine output."""
+    # pdflatex needs 2 passes to place TikZ overlays (remember picture); tectonic reruns by itself.
     if engine == "pdflatex":
-        cmds = [[exe, "-interaction=nonstopmode", "-halt-on-error", tex_name]] * 2  # 2 passes for TikZ overlays
+        cmds = [[exe, "-interaction=nonstopmode", "-halt-on-error", tex_name]] * 2
     elif engine == "tectonic":
         cmds = [[exe, "--keep-logs", "--chatter", "minimal", tex_name]]
     else:
+        pdflatex = "pdflatex -interaction=nonstopmode -halt-on-error %s" % tex_name
+        # Run as the current user so the output files are not owned by root.
         user = ["-u", "%d:%d" % (os.getuid(), os.getgid())] if hasattr(os, "getuid") else []
         cmds = [[exe, "run", "--rm"] + user + ["-e", "HOME=/tmp", "-v", "%s:/w" % workdir, "-w", "/w",
                                                DOCKER_IMAGE, "sh", "-c", "%s && %s" % (pdflatex, pdflatex)]]
@@ -79,6 +82,7 @@ def _compile(engine, exe, workdir: Path, tex_name: str):
 
 
 def parse_log(text: str) -> dict:
+    """Extract errors (with their line number), page count and overfull boxes from a LaTeX log."""
     lines = text.splitlines()
     errors = []
     for i, line in enumerate(lines):
@@ -114,6 +118,8 @@ def rasterize(pdf: Path, fmt: str, dpi: int) -> list:
     elif tool == "pdftoppm":
         flag = "-jpeg" if fmt == "jpg" else "-png"
         prefix = pdf.with_name(pdf.stem)
+        for old in pdf.parent.glob(pdf.stem + "-*." + fmt):
+            old.unlink()  # pages left over from a previous, longer build
         subprocess.run([_which("pdftoppm"), flag, "-r", str(dpi), str(pdf), str(prefix)], check=True)
         produced = sorted(pdf.parent.glob(pdf.stem + "-*." + fmt))
         if len(produced) == 1:
@@ -124,8 +130,19 @@ def rasterize(pdf: Path, fmt: str, dpi: int) -> list:
     return outputs
 
 
+def output_stem(cv_path: Path, *parts) -> str:
+    """Output file name: <file>[-<variant>][-<template>]-<lang>, safe to use as a single path component."""
+    stem = "-".join(x for x in (cv_path.stem,) + parts if x)
+    return re.sub(r"[^\w.-]+", "_", stem)  # variant and lang come from the user: never let them reach outside out_dir
+
+
 def build(cv_path, lang=None, template=None, variant=None, hide=(), out_dir="out",
           formats=("pdf", "png"), dpi=200, engine="auto", keep_tex=True, fit=True) -> dict:
+    """Validate, render and compile a CV file.
+
+    Never raises for CV or LaTeX errors: returns {"ok": False, "stage": "validation" | "latex",
+    "errors": [...]}, or on success {"ok": True, "files", "images", "pages", "warnings", ...}.
+    """
     cv_path = Path(cv_path).resolve()
     data = model.load(cv_path)
     lang = lang or model.default_lang(data)
@@ -141,7 +158,7 @@ def build(cv_path, lang=None, template=None, variant=None, hide=(), out_dir="out
                 "warnings": [i for i in issues if i["level"] == "warning"]}
 
     cv, _ = model.resolve(data, lang, variant, hide)
-    stem = "-".join(x for x in (cv_path.stem, variant, None if template == file_template else template, lang) if x)
+    stem = output_stem(cv_path, variant, None if template == file_template else template, lang)
     out_dir = Path(out_dir).resolve()
     work = out_dir / ".build" / stem
     if work.exists():
@@ -157,6 +174,7 @@ def build(cv_path, lang=None, template=None, variant=None, hide=(), out_dir="out
 
     engine_name, exe = pick_engine(engine)
     pdf_built, log_file = work / "cv.pdf", work / "cv.log"
+    # Try 10pt first; if the CV spills onto a second page, retry once at 9pt.
     for size in ("10pt", "9pt") if fit else ("10pt",):
         cv["_size"] = size
         (work / "cv.tex").write_text(TEMPLATES[template].render(cv, lang, photo_file), encoding="utf-8")

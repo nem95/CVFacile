@@ -62,6 +62,11 @@ class ModelTest(unittest.TestCase):
         paths = {i["path"] for i in issues if i["level"] == "error"}
         self.assertEqual(paths, {"$.basics.name", "$.work[0].position"})
 
+    def test_malformed_variants_are_errors_not_crashes(self):
+        issues = model.validate({"basics": {"name": "A"}, "variants": {"x": "oops", "y": {"hide": "phone"}}}, ROOT)
+        paths = {i["path"] for i in issues if i["level"] == "error"}
+        self.assertEqual(paths, {"$.variants.x", "$.variants.y.hide"})
+
 
 class TemplateTest(unittest.TestCase):
     def test_all_templates_render_every_language(self):
@@ -73,6 +78,10 @@ class TemplateTest(unittest.TestCase):
                 self.assertIn(r"\begin{document}", tex, name)
                 self.assertIn(r"\end{document}", tex, name)
                 self.assertNotIn("**", tex, name)
+
+    def test_output_stem(self):
+        self.assertEqual(build.output_stem(Path("cv.json"), "no-phone", None, "fr"), "cv-no-phone-fr")
+        self.assertEqual(build.output_stem(Path("cv.json"), "x/../../evil", None, "en"), "cv-x_.._.._evil-en")
 
     def test_parse_log(self):
         log = "Output written on cv.pdf (2 pages, 1234 bytes).\nOverfull \\hbox (3pt too wide)\n! Undefined control sequence.\nl.12 \\foo\n"
