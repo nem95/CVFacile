@@ -1,0 +1,36 @@
+# CVfacile
+
+> Free, open-source command-line tool that builds clean one-page PDF résumés (CVs), typeset with LaTeX, from a single JSON file. Built for humans and AI agents (Claude Code, Cursor, Codex): give your old CV to your agent, it writes the JSON and builds a CV tailored to each job offer. Python 3.8+, standard library only. AGPL-3.0, commercial license available. Version __VERSION__, updated __LASTMOD__.
+
+- You never write LaTeX: edit the JSON, then build. Inline formatting is only `**bold**` and `[text](url)`; special characters are escaped automatically.
+- 10 templates, all ATS-friendly: sidebar, classic (the most ATS-optimized), modern, minimal, timeline, compact, dark, elegant, banner, tech. `--template all` builds one PDF per template.
+- Any text or list can be translated (`{"en": "...", "fr": "..."}`). Variants patch the base CV: objects merged, lists replaced, `hide` removes fields or sections.
+- If the CV is slightly too long, text drops from 10pt to 9pt and this is reported; otherwise a layout warning is returned.
+- Every command accepts `--json`. MCP tools (declared in `.mcp.json`): check_cv, build_cv, list_templates, get_schema.
+- LaTeX engines: pdflatex, then Tectonic (`./cvfacile setup` installs it locally without admin rights), then Docker (`texlive/texlive`).
+- Agent rules (AGENTS.md): never invent experience, degrees, numbers or skills; ask when something is missing; one page unless asked otherwise.
+- CVfacile runs locally, with no server and no account. The CVs you generate are yours.
+
+## Docs
+
+- [Landing page (English)](https://nem95.github.io/CVFacile/)
+- [Page d'accueil (français)](https://nem95.github.io/CVFacile/fr/)
+- [README](https://github.com/nem95/CVFacile#readme): quick start, commands, format
+- [AGENTS.md](https://github.com/nem95/CVFacile/blob/main/AGENTS.md): instructions for AI agents
+- [JSON Schema](https://github.com/nem95/CVFacile/blob/main/schema/cv.schema.json)
+- [Full example](https://github.com/nem95/CVFacile/blob/main/examples/example.json)
+- [Template renders](https://github.com/nem95/CVFacile/blob/main/examples/README.md)
+
+## Quick start
+
+```sh
+git clone https://github.com/nem95/CVFacile.git && cd CVFacile
+./cvfacile doctor
+./cvfacile init mycv.json
+./cvfacile build mycv.json
+```
+
+## License
+
+- [AGPL-3.0](https://github.com/nem95/CVFacile/blob/main/LICENSE): free, including for your own CV.
+- [Commercial terms](https://github.com/nem95/CVFacile/blob/main/COMMERCIAL.md): for products or SaaS that do not publish their code.

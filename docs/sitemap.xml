@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://nem95.github.io/CVFacile/</loc>
+    <lastmod>__LASTMOD__</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nem95.github.io/CVFacile/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://nem95.github.io/CVFacile/fr/"/>
+  </url>
+  <url>
+    <loc>https://nem95.github.io/CVFacile/fr/</loc>
+    <lastmod>__LASTMOD__</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nem95.github.io/CVFacile/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://nem95.github.io/CVFacile/fr/"/>
+  </url>
+</urlset>
