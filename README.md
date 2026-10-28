@@ -2,6 +2,8 @@
 
 Clean PDF résumés, typeset with LaTeX from a single JSON file. Built for humans **and** AI agents (Claude Code, Cursor, Codex…).
 
+Website: [nem95.github.io/CVFacile](https://nem95.github.io/CVFacile/) ([français](https://nem95.github.io/CVFacile/fr/), [llms.txt](https://nem95.github.io/CVFacile/llms.txt)).
+
 - **One file, every version**: English and French, with or without a phone number, front-end or back-end focus… all from the same JSON.
 - **No LaTeX to write**: text is escaped automatically, with just `**bold**` and `[links](https://…)`.
 - **Fits on one page**: if the CV is a bit too long, the text is reduced from 10pt to 9pt automatically (and reported).
@@ -11,7 +13,7 @@ Clean PDF résumés, typeset with LaTeX from a single JSON file. Built for human
 ## Quick start
 
 ```sh
-git clone https://github.com/nem95/CVfacile.git && cd CVfacile
+git clone https://github.com/nem95/CVFacile.git && cd CVfacile
 ./cvfacile doctor          # check available tools
 ./cvfacile setup           # only if no LaTeX is found: installs Tectonic into ./.bin
 ./cvfacile init mycv.json  # create an example CV

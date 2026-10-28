@@ -19,6 +19,6 @@ CVfacile is released under the [AGPL-3.0](LICENSE). It is free and fits most use
 
 ## Contact
 
-To get a commercial license, [open an issue](https://github.com/nem95/CVfacile/issues/new?title=Commercial%20license) titled "Commercial license", or contact [@nem95](https://github.com/nem95) on GitHub.
+To get a commercial license, [open an issue](https://github.com/nem95/CVFacile/issues/new?title=Commercial%20license) titled "Commercial license", or contact [@nem95](https://github.com/nem95) on GitHub.
 
 > This page is a summary. The commercial license agreement is the binding document.
