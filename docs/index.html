@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CVfacile: AI resume builder for Claude Code, Cursor, Codex</title>
+<meta name="description" content="Free, open-source CV generator: your AI agent turns your old CV into one JSON file and builds a one-page LaTeX PDF résumé tailored to each job offer.">
+<link rel="canonical" href="https://nem95.github.io/CVFacile/">
+<link rel="alternate" hreflang="en" href="https://nem95.github.io/CVFacile/">
+<link rel="alternate" hreflang="fr" href="https://nem95.github.io/CVFacile/fr/">
+<link rel="alternate" hreflang="x-default" href="https://nem95.github.io/CVFacile/">
+<link rel="alternate" type="text/markdown" title="llms.txt" href="https://nem95.github.io/CVFacile/llms.txt">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="CVfacile">
+<meta property="og:locale" content="en_US">
+<meta property="og:url" content="https://nem95.github.io/CVFacile/">
+<meta property="og:title" content="CVfacile: give your old CV to your AI agent">
+<meta property="og:description" content="Free, open-source résumé builder: your AI agent turns your old CV into a clean LaTeX PDF, tailored to each job offer.">
+<meta property="og:image" content="https://nem95.github.io/CVFacile/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Give your old CV to your AI agent. Get a clean LaTeX PDF résumé, tailored to each job offer.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#2340FF">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preload" href="assets/fonts/league-gothic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/inter.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/site.css">
+<script>
+  // Entrance animations only when the visitor accepts motion.
+  if (!matchMedia("(prefers-reduced-motion: reduce)").matches && "IntersectionObserver" in window) {
+    document.documentElement.classList.add("motion");
+  }
+</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": [
+    "SoftwareApplication",
+    "SoftwareSourceCode"
+   ],
+   "@id": "https://nem95.github.io/CVFacile/#app",
+   "name": "CVfacile",
+   "url": "https://nem95.github.io/CVFacile/",
+   "inLanguage": [
+    "en",
+    "fr"
+   ],
+   "description": "Free, open-source command-line tool that builds one-page PDF résumés (CVs), typeset with LaTeX, from a single JSON file. Made for humans and AI agents (Claude Code, Cursor, Codex): --json output, MCP tools and AGENTS.md instructions.",
+   "applicationCategory": "DeveloperApplication",
+   "applicationSubCategory": "Résumé / CV generator",
+   "operatingSystem": "Any system with Python 3.8+",
+   "softwareVersion": "__VERSION__",
+   "programmingLanguage": [
+    "Python",
+    "LaTeX"
+   ],
+   "runtimePlatform": "Python 3.8+",
+   "codeRepository": "https://github.com/nem95/CVFacile",
+   "license": "https://www.gnu.org/licenses/agpl-3.0.html",
+   "image": "https://nem95.github.io/CVFacile/assets/og.png",
+   "screenshot": "https://nem95.github.io/CVFacile/examples/output/modern.png",
+   "featureList": [
+    "10 LaTeX résumé templates from one JSON file",
+    "Translations of any text or list",
+    "Variants: merged objects, replaced lists, hidden fields",
+    "Fits on one page: text reduced from 10pt to 9pt and reported",
+    "--json output on every command",
+    "MCP tools: check_cv, build_cv, list_templates, get_schema",
+    "JSON Schema for autocompletion",
+    "Local Tectonic install without admin rights"
+   ],
+   "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "EUR",
+    "description": "Free under AGPL-3.0. A commercial license is available for closed-source products and SaaS."
+   },
+   "author": {
+    "@id": "https://nem95.github.io/CVFacile/#author"
+   },
+   "copyrightYear": 2026,
+   "dateModified": "__LASTMOD__"
+  },
+  {
+   "@type": "Person",
+   "@id": "https://nem95.github.io/CVFacile/#author",
+   "name": "Naïm Chatti",
+   "url": "https://github.com/nem95",
+   "sameAs": [
+    "https://github.com/nem95"
+   ]
+  },
+  {
+   "@type": "FAQPage",
+   "@id": "https://nem95.github.io/CVFacile/#faq",
+   "inLanguage": "en",
+   "mainEntity": [
+    {
+     "@type": "Question",
+     "name": "How do I tailor my CV to a job offer with Claude Code?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Clone the repository and open Claude Code (or Cursor, or Codex) in the folder: .mcp.json gives the agent the CVfacile tools. Give it your old CV, then paste the job offer and ask for a variant. It saves the changes under a name like offer-x and builds the PDF."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Is CVfacile free?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Yes. CVfacile is free and open source under the AGPL-3.0, including for writing your own CV for work. A commercial license is only needed to build it into a product or a SaaS without publishing your code."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Do I need LaTeX installed?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "No. ./cvfacile setup installs Tectonic into ./.bin, without admin rights. If pdflatex (TeX Live, MiKTeX) or the texlive/texlive Docker image is already there, CVfacile uses it."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Will the AI agent invent experience?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "AGENTS.md tells agents to use only what you provided: no invented experience, degrees, numbers or skills. When something is missing, the agent asks you."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Can one CV have several languages and versions?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Yes. Any text or list can hold several languages, like {\"en\": \"…\", \"fr\": \"…\"}. Variants patch the base CV. Build one with --lang fr --variant offer-x, or hide fields with --hide phone,photo."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Is it ATS-friendly?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Yes, all 10 templates are ATS-friendly. The classic template is the most optimized: single column, no photo. Pick it when you apply through an applicant tracking system."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Does CVfacile send my CV anywhere?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "No. CVfacile runs on your computer, with no server and no account. It only goes online to install Tectonic, which then downloads LaTeX packages. Your AI agent's provider sees what you share with the agent."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Who owns the CVs I generate?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "You do. The license does not apply to their content."
+     }
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+
+<header class="w-cobalt">
+  <div class="wrap">
+    <nav>
+      <a class="mark" href="./" aria-label="CVfacile home">CVfacile</a>
+      <ul>
+        <li><a href="#agents">How it works</a></li>
+        <li><a href="#templates">Templates</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="https://github.com/nem95/CVFacile"><span class="long">View on </span>GitHub</a></li>
+        <li><a class="lang-switch" href="https://nem95.github.io/CVFacile/fr/" hreflang="fr" lang="fr" aria-label="Version française">FR</a></li>
+      </ul>
+    </nav>
+
+    <div class="hero">
+      <div>
+        <h1>Give your old CV<br>to your <em>AI agent.</em></h1>
+        <p class="lede">An open-source résumé builder: your AI agent turns your old CV into a clean LaTeX PDF, tailored to each job offer.</p>
+        <div class="actions">
+          <a class="btn solid" href="#start">Get started</a>
+          <a class="btn" href="https://github.com/nem95/CVFacile">View on GitHub</a>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="sheet"><img src="examples/output/thumb/modern-480.webp" srcset="examples/output/thumb/modern-480.webp 480w, examples/output/thumb/modern-910.webp 910w" sizes="(max-width: 1024px) 440px, 420px" width="910" height="1287" alt="A one-page CV in the modern template, built by CVfacile" fetchpriority="high"></div>
+        <p class="prompt hero-prompt">Here is my old CV: <code>cv_final_v7.docx</code>. Make me a clean one, tailored to this job offer.</p>
+        <span class="cmd" aria-hidden="true">./cvfacile build cv.json</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- Demo video: add docs/demo.mp4, then put this section back.
+  <section id="demo" class="w-ink">
+    <div class="wrap">
+      <div class="reveal">
+        <h2>See it in <span class="stamp mint">action.</span></h2>
+        <p class="intro">An old CV goes in. Your agent rewrites it, and you get a clean PDF in every template.</p>
+      </div>
+      <video class="demo reveal" controls muted playsinline preload="metadata" poster="assets/og.png">
+        <source src="demo.mp4" type="video/mp4">
+      </video>
+    </div>
+  </section>
+  -->
+
+  <section id="about" class="w-ink">
+    <div class="wrap about">
+      <div class="reveal">
+        <h2>What is <span class="stamp mint">CVfacile?</span></h2>
+        <p class="statement">CVfacile is a free, open-source command-line tool that builds one-page PDF résumés, typeset with LaTeX, from a single JSON file. It needs Python 3.8+ and nothing else.</p>
+      </div>
+      <dl class="facts reveal" style="--i:1">
+          <div><dt>Who it is for</dt><dd>Job seekers who want a different CV for each job offer, with an AI coding agent like Claude Code, Cursor or Codex, or by hand.</dd></div>
+          <div><dt>How it works</dt><dd>Your agent turns your old CV into <code>cv.json</code>, runs <code>check</code> and <code>build</code>, reads the warnings, and shortens the text until it fits on one page.</dd></div>
+          <div><dt>What you get</dt><dd>A PDF and a PNG preview, in 10 templates and every language you add. The CVs you generate are yours.</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section id="agents" class="w-mint">
+    <div class="wrap">
+      <div class="reveal">
+        <h2>Your old CV in. <span class="stamp yellow">A tailored one out.</span></h2>
+        <p class="intro">Your agent does the rewriting. CVfacile does the layout, so every version looks right.</p>
+      </div>
+      <div class="split">
+        <ol class="how reveal" style="--i:1">
+          <li><strong>Hand it over</strong><span>Point your agent to your old PDF or Word file, or paste your LinkedIn profile.</span></li>
+          <li><strong>It writes cv.json</strong><span>Only with what is in your CV: no invented jobs, degrees or numbers. If something is missing, it asks you.</span></li>
+          <li><strong>It builds and checks</strong><span>PDF and PNG preview. It reads the warnings and shortens the text until it fits on one page.</span></li>
+          <li><strong>One per offer</strong><span>Paste a job offer: it saves a variant for that offer. Your base CV does not change.</span></li>
+        </ol>
+        <div class="chat reveal" style="--i:2">
+          <p class="you">Here is my old CV: <code>~/Downloads/cv_2023.pdf</code>. Turn it into my CVfacile CV.</p>
+          <p class="agent"><b>cv.json written.</b> Two questions before I build: what were your dates at Semantica? Should I keep your phone number?</p>
+          <p class="you">Now tailor it to this job offer, save it as <code>offer-x</code>, and keep it to one page.</p>
+          <p class="agent"><b>Built out/cv-en.pdf:</b> 1 page, no layout warnings. I moved your React work to the top and cut two older bullets.</p>
+          <div class="sheet"><img src="examples/output/thumb/sidebar-480.webp" srcset="examples/output/thumb/sidebar-480.webp 480w, examples/output/thumb/sidebar-910.webp 910w" sizes="(max-width: 1024px) 78vw, 340px" width="910" height="1287" alt="The tailored CV in the sidebar template, built by CVfacile" loading="lazy"></div>
+        </div>
+      </div>
+      <p class="tools reveal">Works with <strong>Claude Code, Cursor and Codex</strong>. The repository ships the MCP tools (<code>.mcp.json</code>), <code>--json</code> output on every command, and the rules in <code>AGENTS.md</code>.</p>
+    </div>
+  </section>
+
+  <section id="templates" class="w-yellow">
+    <div class="wrap">
+      <div class="reveal">
+        <h2>10 LaTeX templates. <span class="stamp ink">Same content.</span></h2>
+        <p class="intro">Every résumé template works with the same JSON file. Switch with <code>--template &lt;name&gt;</code>, or compare them all with <code>--template all</code>. Click one to see it full size.</p>
+      </div>
+      <div class="gallery">
+        <figure class="tpl reveal" style="--i:0" data-name="sidebar" data-full="examples/output/sidebar.png" data-pdf="examples/output/sidebar.pdf">
+          <button type="button"><img src="examples/output/thumb/sidebar-480.webp" srcset="examples/output/thumb/sidebar-480.webp 480w, examples/output/thumb/sidebar-910.webp 910w" sizes="(max-width: 767px) 50vw, (max-width: 1024px) 33vw, 230px" width="910" height="1287" alt="CVfacile sidebar résumé template: Two columns: sidebar with photo, contact and skills." loading="lazy"></button>
+          <figcaption><strong>sidebar</strong><span>Two columns: sidebar with photo, contact and skills.</span><span class="links"><a class="pdf" href="examples/output/sidebar.pdf" target="_blank" rel="noopener">PDF<span class="sr"> sidebar</span></a><button type="button" class="copy" data-prompt="Build my CV with the CVfacile sidebar template: run ./cvfacile build cv.json --template sidebar, then check the warnings and look at the PNG." data-label="Copy prompt" data-done="Copied">Copy prompt</button></span></figcaption>
+        </figure>
+        <figure class="tpl reveal" style="--i:1" data-name="classic" data-full="examples/output/classic.png" data-pdf="examples/output/classic.pdf">
+          <button type="button"><img src="examples/output/thumb/classic-480.webp" srcset="examples/output/thumb/classic-480.webp 480w, examples/output/thumb/classic-910.webp 910w" sizes="(max-width: 767px) 50vw, (max-width: 1024px) 33vw, 230px" width="910" height="1287" alt="CVfacile classic résumé template: Single column, serif, centered header, no photo. The most ATS-optimized." loading="lazy"></button>
+          <figcaption><strong>classic</strong><span>Single column, serif, centered header, no photo. The most ATS-optimized.</span><span class="links"><a class="pdf" href="examples/output/classic.pdf" target="_blank" rel="noopener">PDF<span class="sr"> classic</span></a><button type="button" class="copy" data-prompt="Build my CV with the CVfacile classic template: run ./cvfacile build cv.json --template classic, then check the warnings and look at the PNG." data-label="Copy prompt" data-done="Copied">Copy prompt</button></span></figcaption>
+        </figure>
+        <figure class="tpl reveal" style="--i:2" data-name="modern" data-full="examples/output/modern.png" data-pdf="examples/output/modern.pdf">
+          <button type="button"><img src="examples/output/thumb/modern-480.webp" srcset="examples/output/thumb/modern-480.webp 480w, examples/output/thumb/modern-910.webp 910w" sizes="(max-width: 767px) 50vw, (max-width: 1024px) 33vw, 230px" width="910" height="1287" alt="CVfacile modern résumé template: Colour header band with photo, main and side columns." loading="lazy"></button>
+          <figcaption><strong>modern</strong><span>Colour header band with photo, main and side columns.</span><span class="links"><a class="pdf" href="examples/output/modern.pdf" target="_blank" rel="noopener">PDF<span class="sr"> modern</span></a><button type="button" class="copy" data-prompt="Build my CV with the CVfacile modern template: run ./cvfacile build cv.json --template modern, then check the warnings and look at the PNG." data-label="Copy prompt" data-done="Copied">Copy prompt</button></span></figcaption>
+        </figure>
+        <figure class="tpl reveal" style="--i:3" data-name="minimal" data-full="examples/output/minimal.png" data-pdf="examples/output/minimal.pdf">
+          <button type="button"><img src="examples/output/thumb/minimal-480.webp" srcset="examples/output/thumb/minimal-480.webp 480w, examples/output/thumb/minimal-910.webp 910w" sizes="(max-width: 767px) 50vw, (max-width: 1024px) 33vw, 230px" width="910" height="1287" alt="CVfacile minimal résumé template: Swiss style: titles in the margin, lots of white space." loading="lazy"></button>
+          <figcaption><strong>minimal</strong><span>Swiss style: titles in the margin, lots of white space.</span><span class="links"><a class="pdf" href="examples/output/minimal.pdf" target="_blank" rel="noopener">PDF<span class="sr"> minimal</span></a><button type="button" class="copy" data-prompt="Build my CV with the CVfacile minimal template: run ./cvfacile build cv.json --template minimal, then check the warnings and look at the PNG." data-label="Copy prompt" data-done="Copied">Copy prompt</button></span></figcaption>
+        </figure>
+        <figure class="tpl reveal" style="--i:4" data-name="timeline" data-full="examples/output/timeline.png" data-pdf="examples/output/timeline.pdf">
+          <button type="button"><img src="examples/output/thumb/timeline-480.webp" srcset="examples/output/thumb/timeline-480.webp 480w, examples/output/thumb/timeline-910.webp 910w" sizes="(max-width: 767px) 50vw, (max-width: 1024px) 33vw, 230px" width="910" height="1287" alt="CVfacile timeline résumé template: Experience as a vertical timeline, dates in the margin." loading="lazy"></button>
+          <figcaption><strong>timeline</strong><span>Experience as a vertical timeline, dates in the margin.</span><span class="links"><a class="pdf" href="examples/output/timeline.pdf" target="_blank" rel="noopener">PDF<span class="sr"> timeline</span></a><button type="button" class="copy" data-prompt="Build my CV with the CVfacile timeline template: run ./cvfacile build cv.json --template timeline, then check the warnings and look at the PNG." data-label="Copy prompt" data-done="Copied">Copy prompt</button></span></figcaption>
+        </figure>
+        <figure class="tpl reveal" style="--i:0" data-name="compact" data-full="examples/output/compact.png" data-pdf="examples/output/compact.pdf">
+          <button type="button"><img src="examples/output/thumb/compact-480.webp" srcset="examples/output/thumb/compact-480.webp 480w, examples/output/thumb/compact-910.webp 910w" sizes="(max-width: 767px) 50vw, (max-width: 1024px) 33vw, 230px" width="910" height="1287" alt="CVfacile compact résumé template: Dense single column, small margins, for long careers." loading="lazy"></button>
+          <figcaption><strong>compact</strong><span>Dense single column, small margins, for long careers.</span><span class="links"><a class="pdf" href="examples/output/compact.pdf" target="_blank" rel="noopener">PDF<span class="sr"> compact</span></a><button type="button" class="copy" data-prompt="Build my CV with the CVfacile compact template: run ./cvfacile build cv.json --template compact, then check the warnings and look at the PNG." data-label="Copy prompt" data-done="Copied">Copy prompt</button></span></figcaption>
+        </figure>
+        <figure class="tpl reveal" style="--i:1" data-name="dark" data-full="examples/output/dark.png" data-pdf="examples/output/dark.pdf">
+          <button type="button"><img src="examples/output/thumb/dark-480.webp" srcset="examples/output/thumb/dark-480.webp 480w, examples/output/thumb/dark-910.webp 910w" sizes="(max-width: 767px) 50vw, (max-width: 1024px) 33vw, 230px" width="910" height="1287" alt="CVfacile dark résumé template: Dark sidebar on the right, bright accent colour." loading="lazy"></button>
+          <figcaption><strong>dark</strong><span>Dark sidebar on the right, bright accent colour.</span><span class="links"><a class="pdf" href="examples/output/dark.pdf" target="_blank" rel="noopener">PDF<span class="sr"> dark</span></a><button type="button" class="copy" data-prompt="Build my CV with the CVfacile dark template: run ./cvfacile build cv.json --template dark, then check the warnings and look at the PNG." data-label="Copy prompt" data-done="Copied">Copy prompt</button></span></figcaption>
+        </figure>
+        <figure class="tpl reveal" style="--i:2" data-name="elegant" data-full="examples/output/elegant.png" data-pdf="examples/output/elegant.pdf">
+          <button type="button"><img src="examples/output/thumb/elegant-480.webp" srcset="examples/output/thumb/elegant-480.webp 480w, examples/output/thumb/elegant-910.webp 910w" sizes="(max-width: 767px) 50vw, (max-width: 1024px) 33vw, 230px" width="910" height="1287" alt="CVfacile elegant résumé template: Centered, small caps, EB Garamond, ornamental rules." loading="lazy"></button>
+          <figcaption><strong>elegant</strong><span>Centered, small caps, EB Garamond, ornamental rules.</span><span class="links"><a class="pdf" href="examples/output/elegant.pdf" target="_blank" rel="noopener">PDF<span class="sr"> elegant</span></a><button type="button" class="copy" data-prompt="Build my CV with the CVfacile elegant template: run ./cvfacile build cv.json --template elegant, then check the warnings and look at the PNG." data-label="Copy prompt" data-done="Copied">Copy prompt</button></span></figcaption>
+        </figure>
+        <figure class="tpl reveal" style="--i:3" data-name="banner" data-full="examples/output/banner.png" data-pdf="examples/output/banner.pdf">
+          <button type="button"><img src="examples/output/thumb/banner-480.webp" srcset="examples/output/thumb/banner-480.webp 480w, examples/output/thumb/banner-910.webp 910w" sizes="(max-width: 767px) 50vw, (max-width: 1024px) 33vw, 230px" width="910" height="1287" alt="CVfacile banner résumé template: Photo header, two columns, section titles as tags." loading="lazy"></button>
+          <figcaption><strong>banner</strong><span>Photo header, two columns, section titles as tags.</span><span class="links"><a class="pdf" href="examples/output/banner.pdf" target="_blank" rel="noopener">PDF<span class="sr"> banner</span></a><button type="button" class="copy" data-prompt="Build my CV with the CVfacile banner template: run ./cvfacile build cv.json --template banner, then check the warnings and look at the PNG." data-label="Copy prompt" data-done="Copied">Copy prompt</button></span></figcaption>
+        </figure>
+        <figure class="tpl reveal" style="--i:4" data-name="tech" data-full="examples/output/tech.png" data-pdf="examples/output/tech.pdf">
+          <button type="button"><img src="examples/output/thumb/tech-480.webp" srcset="examples/output/thumb/tech-480.webp 480w, examples/output/thumb/tech-910.webp 910w" sizes="(max-width: 767px) 50vw, (max-width: 1024px) 33vw, 230px" width="910" height="1287" alt="CVfacile tech résumé template: Developer look: monospace accents, skills as tags." loading="lazy"></button>
+          <figcaption><strong>tech</strong><span>Developer look: monospace accents, skills as tags.</span><span class="links"><a class="pdf" href="examples/output/tech.pdf" target="_blank" rel="noopener">PDF<span class="sr"> tech</span></a><button type="button" class="copy" data-prompt="Build my CV with the CVfacile tech template: run ./cvfacile build cv.json --template tech, then check the warnings and look at the PNG." data-label="Copy prompt" data-done="Copied">Copy prompt</button></span></figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section id="features" class="w-grey">
+    <div class="wrap">
+      <div class="reveal">
+        <h2>One JSON file. <span class="stamp tomato">Every version.</span></h2>
+        <p class="intro">One version per job offer, per language, with or without your phone number. Your agent keeps them all in the same JSON file.</p>
+      </div>
+      <div class="bento">
+        <div class="tile dark reveal">
+          <h3>Every language.<br>Every variant.</h3>
+          <p>Any text or list can hold several languages. Variants patch the base CV: objects are merged, lists replaced, <code>hide</code> removes fields.</p>
+          <div class="langs">
+            <figure><img src="assets/cv-en.webp" alt="The example CV in English" width="700" height="990" loading="lazy"><figcaption>--lang en</figcaption></figure>
+            <figure><img src="assets/cv-fr.webp" alt="The same CV in French" width="700" height="990" loading="lazy"><figcaption>--lang fr</figcaption></figure>
+          </div>
+<pre><span class="k">"label"</span>: {
+  <span class="k">"en"</span>: <span class="s">"Full-Stack Engineer"</span>,
+  <span class="k">"fr"</span>: <span class="s">"Développeur Full-Stack"</span>
+},
+<span class="k">"variants"</span>: {
+  <span class="k">"no-phone"</span>: { <span class="k">"hide"</span>: [<span class="s">"phone"</span>] }
+}
+
+<span class="p">$ </span>./cvfacile build cv.json --lang fr --variant no-phone</pre>
+        </div>
+        <div class="tile page reveal" style="--i:1">
+          <img src="examples/output/thumb/compact-480.webp" srcset="examples/output/thumb/compact-480.webp 480w, examples/output/thumb/compact-910.webp 910w" sizes="200px" width="910" height="1287" alt="A compact one-page CV" loading="lazy">
+          <h3>Fits on one page</h3>
+          <p>Slightly too long? The text drops from 10pt to 9pt and you are told. Still too long? You get a warning.</p>
+        </div>
+        <div class="tile reveal" style="--i:2">
+          <h3>No LaTeX to write</h3>
+          <p>Use <code>**bold**</code> and <code>[links](https://…)</code>. Characters like <code>&amp;</code>, <code>%</code> or <code>_</code> are escaped for you.</p>
+        </div>
+        <div class="tile reveal" style="--i:3">
+          <h3>Light to install</h3>
+          <p>Python 3.8+, nothing else. No LaTeX? <code>./cvfacile setup</code> installs Tectonic locally, without admin rights.</p>
+        </div>
+        <div class="tile reveal" style="--i:4">
+          <h3>Autocomplete</h3>
+          <p>A JSON Schema gives you autocompletion in VS Code. <code>check</code> points to the exact field of each error.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="start" class="w-tomato start">
+    <div class="wrap">
+      <div class="reveal">
+        <h2>Get started in <span class="stamp ink">a minute.</span></h2>
+        <p class="intro">Clone the repository, open your AI agent in the folder, and give it your old CV. Prefer doing it by hand? These commands are all you need.</p>
+      </div>
+<pre class="reveal" style="--i:1"><span class="p">$ </span>git clone https://github.com/nem95/CVFacile.git &amp;&amp; cd CVFacile
+<span class="p">$ </span>./cvfacile doctor          <span class="c"># check LaTeX and image tools</span>
+<span class="p">$ </span>./cvfacile setup           <span class="c"># only if no LaTeX was found</span>
+<span class="p">$ </span>./cvfacile init mycv.json  <span class="c"># example CV to fill in</span>
+<span class="p">$ </span>./cvfacile build mycv.json
+
+<span class="c"># French version, no phone, every template</span>
+<span class="p">$ </span>./cvfacile build mycv.json --lang fr --hide phone --template all</pre>
+      <p class="note">With Tectonic, the first build downloads the LaTeX packages it needs (about 2 minutes), then each build takes a few seconds. Every option is in the <a href="https://github.com/nem95/CVFacile#readme">README</a>.</p>
+    </div>
+  </section>
+
+  <section id="faq" class="w-grey">
+    <div class="wrap">
+      <h2 class="reveal">Frequently asked <span class="stamp ink">questions.</span></h2>
+      <div class="faq">
+        <details>
+          <summary>How do I tailor my CV to a job offer with Claude Code?</summary>
+          <p>Clone the repository and open Claude Code (or Cursor, or Codex) in the folder: <code>.mcp.json</code> gives the agent the CVfacile tools. Give it your old CV, then paste the job offer and ask for a variant. It saves the changes under a name like <code>offer-x</code> and builds the PDF.</p>
+        </details>
+        <details>
+          <summary>Is CVfacile free?</summary>
+          <p>Yes. CVfacile is free and open source under the AGPL-3.0, including for writing your own CV for work. A commercial license is only needed to build it into a product or a SaaS without publishing your code.</p>
+        </details>
+        <details>
+          <summary>Do I need LaTeX installed?</summary>
+          <p>No. <code>./cvfacile setup</code> installs Tectonic into <code>./.bin</code>, without admin rights. If pdflatex (TeX Live, MiKTeX) or the <code>texlive/texlive</code> Docker image is already there, CVfacile uses it.</p>
+        </details>
+        <details>
+          <summary>Will the AI agent invent experience?</summary>
+          <p><code>AGENTS.md</code> tells agents to use only what you provided: no invented experience, degrees, numbers or skills. When something is missing, the agent asks you.</p>
+        </details>
+        <details>
+          <summary>Can one CV have several languages and versions?</summary>
+          <p>Yes. Any text or list can hold several languages, like <code>{"en": "…", "fr": "…"}</code>. Variants patch the base CV. Build one with <code>--lang fr --variant offer-x</code>, or hide fields with <code>--hide phone,photo</code>.</p>
+        </details>
+        <details>
+          <summary>Is it ATS-friendly?</summary>
+          <p>Yes, all 10 templates are ATS-friendly. The <code>classic</code> template is the most optimized: single column, no photo. Pick it when you apply through an applicant tracking system.</p>
+        </details>
+        <details>
+          <summary>Does CVfacile send my CV anywhere?</summary>
+          <p>No. CVfacile runs on your computer, with no server and no account. It only goes online to install Tectonic, which then downloads LaTeX packages. Your AI agent's provider sees what you share with the agent.</p>
+        </details>
+        <details>
+          <summary>Who owns the CVs I generate?</summary>
+          <p>You do. The license does not apply to their content.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section id="license" class="w-ink">
+    <div class="wrap">
+      <div class="reveal">
+        <h2>Free for your CV.<br><span class="stamp yellow">Open source.</span></h2>
+        <p class="intro">The CVs you generate are yours: the license does not apply to their content.</p>
+      </div>
+      <div class="license">
+        <div class="lic a reveal">
+          <h3>AGPL-3.0</h3>
+          <p>Free for everyone, including for writing your own CV for work. If you build CVfacile into a product or service that you distribute or run online, that service's source code must be published under the AGPL.</p>
+          <a href="https://github.com/nem95/CVFacile/blob/main/LICENSE">Read the license</a>
+        </div>
+        <div class="lic b reveal" style="--i:1">
+          <h3>Commercial license</h3>
+          <p>To build CVfacile into a product or a SaaS without publishing your code.</p>
+          <a href="https://github.com/nem95/CVFacile/blob/main/COMMERCIAL.md">Commercial terms</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="w-ink">
+  <div class="wrap endline">
+    <a class="url" href="https://github.com/nem95/CVFacile">github.com/nem95/CVFacile</a>
+    <div class="meta">
+      <span>© 2026 Naïm Chatti</span>
+      <span>Version __VERSION__, updated __LASTMOD__</span>
+      <span>Example CVs are fictional.</span>
+      <a href="https://github.com/nem95/CVFacile/blob/main/CONTRIBUTING.md">Contribute</a>
+      <a href="llms.txt">llms.txt</a>
+      <a href="https://nem95.github.io/CVFacile/fr/" hreflang="fr" lang="fr">Version française</a>
+    </div>
+  </div>
+</footer>
+
+<dialog id="viewer" aria-label="Template preview">
+  <div class="dlg-bar">
+    <strong id="viewer-name"></strong>
+    <div><a id="viewer-pdf" href="examples/output/sidebar.pdf" target="_blank" rel="noopener">Open PDF</a><button type="button" id="viewer-close">Close</button></div>
+  </div>
+  <img id="viewer-img" alt="">
+</dialog>
+
+<script src="assets/site.js" defer></script>
+</body>
+</html>
