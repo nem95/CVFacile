@@ -3,13 +3,17 @@
 """Assemble the GitHub Pages site into a folder.
 
 Copies docs/ and examples/output, makes WebP thumbnails of the template renders
-(480 and 910 px wide), and fills __VERSION__ and __LASTMOD__ in the text files.
-Needs Pillow (pip install pillow), unlike the CVfacile tool itself.
+(480 and 910 px wide), and fills __VERSION__, __LASTMOD__ and the PostHog settings
+in the text files. Needs Pillow (pip install pillow), unlike the CVfacile tool itself.
 
-Usage: python3 scripts/build_site.py [out_dir]   (default: _site)
+Analytics: set POSTHOG_KEY (project token) and optionally POSTHOG_HOST
+(default https://eu.i.posthog.com). Without POSTHOG_KEY the site loads no analytics.
+
+Usage: [POSTHOG_KEY=phc_...] python3 scripts/build_site.py [out_dir]   (default: _site)
 Preview: python3 -m http.server -d _site
 """
 import datetime
+import os
 import re
 import shutil
 import subprocess
@@ -43,9 +47,18 @@ except (OSError, subprocess.CalledProcessError):
     lastmod = ""
 lastmod = lastmod or datetime.date.today().isoformat()
 
+values = {
+    "__VERSION__": version,
+    "__LASTMOD__": lastmod,
+    "__POSTHOG_KEY__": os.environ.get("POSTHOG_KEY", "").strip(),
+    "__POSTHOG_HOST__": os.environ.get("POSTHOG_HOST", "").strip() or "https://eu.i.posthog.com",
+}
 for f in list(out.rglob("*.html")) + list(out.rglob("*.xml")) + list(out.rglob("*.txt")):
     text = f.read_text(encoding="utf-8")
-    if "__VERSION__" in text or "__LASTMOD__" in text:
-        f.write_text(text.replace("__VERSION__", version).replace("__LASTMOD__", lastmod), encoding="utf-8")
+    filled = text
+    for placeholder, value in values.items():
+        filled = filled.replace(placeholder, value)
+    if filled != text:
+        f.write_text(filled, encoding="utf-8")
 
-print("site: %s (version %s, updated %s)" % (out, version, lastmod))
+print("site: %s (version %s, updated %s, analytics %s)" % (out, version, lastmod, "on" if values["__POSTHOG_KEY__"] else "off"))

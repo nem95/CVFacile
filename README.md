@@ -4,6 +4,8 @@ Clean PDF résumés, typeset with LaTeX from a single JSON file. Built for human
 
 Website: [nem95.github.io/CVFacile](https://nem95.github.io/CVFacile/) ([français](https://nem95.github.io/CVFacile/fr/), [llms.txt](https://nem95.github.io/CVFacile/llms.txt)).
 
+[![CVfacile: give your old CV to your AI agent, get a clean LaTeX PDF résumé tailored to each job offer](docs/assets/og.png)](https://nem95.github.io/CVFacile/)
+
 - **One file, every version**: English and French, with or without a phone number, front-end or back-end focus… all from the same JSON.
 - **No LaTeX to write**: text is escaped automatically, with just `**bold**` and `[links](https://…)`.
 - **Fits on one page**: if the CV is a bit too long, the text is reduced from 10pt to 9pt automatically (and reported).

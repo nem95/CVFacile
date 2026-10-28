@@ -29,6 +29,10 @@ jobs:
         with:
           python-version: "3.12"
       - name: Assemble site
+        env:
+          # Settings > Secrets and variables > Actions > Variables
+          POSTHOG_KEY: ${{ vars.POSTHOG_KEY }}
+          POSTHOG_HOST: ${{ vars.POSTHOG_HOST }}
         run: |
           pip install pillow
           python3 scripts/build_site.py _site
