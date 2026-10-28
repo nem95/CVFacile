@@ -1,6 +1,5 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cvfacile.dev/schema/cv.schema.json",
   "title": "CVfacile CV",
   "description": "CVfacile CV format. Any text field can be translated: { \"en\": \"...\", \"fr\": \"...\" }. Inline formatting in text: **bold** and [link](https://...).",
   "type": "object",

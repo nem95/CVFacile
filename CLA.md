@@ -10,5 +10,3 @@ This agreement applies to every contribution (code, documentation, templates…)
 6. The contribution is provided "as is", without warranty.
 
 To accept, add to your first pull request: "I have read the CVfacile CLA and I agree to its terms for my contributions."
-
-> This is a simplified template. Have it reviewed by a lawyer before accepting outside contributions.
