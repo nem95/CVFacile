@@ -1,8 +1,15 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
-// CVfacile site: template viewer and scroll reveals.
+// CVfacile site: template viewer, scroll reveals and analytics events.
 // The page works without this file: every template, caption and PDF link is in the HTML.
 
 (function () {
+  // Analytics (assets/analytics.js). Does nothing when PostHog is not configured.
+  const track = (event, properties) => { if (window.cvfTrack) window.cvfTrack(event, properties); };
+  const where = (el) => {
+    const zone = el.closest("nav, footer, section, header, dialog");
+    return zone ? (zone.tagName === "NAV" ? "nav" : zone.id || zone.tagName.toLowerCase()) : "page";
+  };
+
   // Template viewer: a click on a template opens it full size.
   const viewer = document.getElementById("viewer");
   if (viewer) {
@@ -16,6 +23,7 @@
         img.alt = fig.querySelector("img").alt;
         pdf.href = fig.dataset.pdf;
         viewer.showModal();
+        track("template_previewed", { template: fig.dataset.name });
       });
     });
     document.getElementById("viewer-close").addEventListener("click", () => viewer.close());
@@ -39,9 +47,39 @@
         try { document.execCommand("copy"); } catch (__) { /* nothing more to try */ }
         ta.remove();
       }
+      track("template_prompt_copied", { template: btn.closest(".tpl").dataset.name });
       btn.textContent = btn.dataset.done;
       btn.classList.add("done");
       setTimeout(() => { btn.textContent = btn.dataset.label; btn.classList.remove("done"); }, 1600);
+    });
+  });
+
+  // Link clicks worth measuring: the main CTA, GitHub, PDFs, language switch, docs.
+  document.addEventListener("click", (e) => {
+    const a = e.target.closest("a[href]");
+    if (!a) return;
+    const href = a.getAttribute("href");
+    if (href === "#start") {
+      track("get_started_clicked", { location: where(a) });
+    } else if (a.id === "viewer-pdf" || a.classList.contains("pdf")) {
+      const tpl = a.closest(".tpl");
+      track("template_pdf_opened", {
+        template: tpl ? tpl.dataset.name : document.getElementById("viewer-name").textContent,
+        from: tpl ? "card" : "viewer",
+      });
+    } else if (a.hasAttribute("hreflang")) {
+      track("language_switched", { to: a.getAttribute("hreflang"), location: where(a) });
+    } else if (/github\.com\/nem95\/CVFacile\/?(#readme)?$/.test(href)) {
+      track("github_clicked", { location: where(a), target: href.endsWith("#readme") ? "readme" : "repo" });
+    } else if (/github\.com\/nem95\/CVFacile\/blob\//.test(href)) {
+      track("repo_doc_opened", { doc: href.split("/").pop(), location: where(a) });
+    }
+  });
+
+  // FAQ: which questions people open.
+  document.querySelectorAll(".faq details").forEach((d) => {
+    d.addEventListener("toggle", () => {
+      if (d.open) track("faq_question_opened", { question: d.querySelector("summary").textContent.trim() });
     });
   });
 
