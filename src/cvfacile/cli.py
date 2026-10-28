@@ -9,7 +9,7 @@ import sys
 from pathlib import Path
 
 from . import __version__, build, model
-from .templates import DEFAULT, TEMPLATES
+from .templates import DEFAULT, TEMPLATES, catalog
 
 EXAMPLE = build.ROOT / "examples" / "example.json"
 
@@ -35,10 +35,6 @@ def cmd_build(a):
                            formats=formats, dpi=a.dpi, engine=a.engine, fit=not a.no_fit) for t in names]
     result = results[0] if len(results) == 1 else {"ok": all(r["ok"] for r in results), "results": results}
 
-    def human_all(r):
-        for one in r.get("results", [r]):
-            human(one)
-
     def human(r):
         if not r["ok"]:
             print("Failed (%s):" % r["stage"])
@@ -52,14 +48,16 @@ def cmd_build(a):
         if r["warnings"]:
             print("Warnings:")
             _print_issues(r["warnings"])
+
+    def human_all(r):
+        for one in r.get("results", [r]):
+            human(one)
     _print(result, a.json, human_all)
     return 0 if result["ok"] else 1
 
 
 def cmd_check(a):
-    path = Path(a.cv).resolve()
-    issues = model.validate(model.load(path), path.parent)
-    result = {"ok": not any(i["level"] == "error" for i in issues), "issues": issues}
+    result = model.check(a.cv)
 
     def human(r):
         print("CV is valid." if r["ok"] else "CV is invalid:")
@@ -69,8 +67,7 @@ def cmd_check(a):
 
 
 def cmd_templates(a):
-    result = {"default": DEFAULT, "templates": [{"name": m.NAME, "description": m.DESCRIPTION,
-                                                 "languages": sorted(m.LABELS)} for m in TEMPLATES.values()]}
+    result = {"default": DEFAULT, "templates": catalog()}
 
     def human(r):
         for t in r["templates"]:

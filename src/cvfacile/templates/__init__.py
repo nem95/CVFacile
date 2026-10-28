@@ -6,3 +6,8 @@ from . import banner, classic, compact, dark, elegant, minimal, modern, sidebar,
 
 TEMPLATES = {m.NAME: m for m in (sidebar, classic, modern, minimal, timeline, compact, dark, elegant, banner, tech)}
 DEFAULT = "sidebar"
+
+
+def catalog() -> list:
+    """Name, description and section-title languages of every template."""
+    return [{"name": m.NAME, "description": m.DESCRIPTION, "languages": sorted(m.LABELS)} for m in TEMPLATES.values()]

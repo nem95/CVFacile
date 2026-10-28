@@ -9,10 +9,9 @@ from __future__ import annotations
 import base64
 import json
 import sys
-from pathlib import Path
 
 from . import __version__, build, model
-from .templates import DEFAULT, TEMPLATES
+from .templates import DEFAULT, catalog
 
 SCHEMA_PATH = build.ROOT / "schema" / "cv.schema.json"
 
@@ -72,9 +71,7 @@ def _preview(pdf: str):
 
 def call_tool(name: str, args: dict):
     if name == "check_cv":
-        path = Path(args["path"]).resolve()
-        issues = model.validate(model.load(path), path.parent)
-        result = {"ok": not any(i["level"] == "error" for i in issues), "issues": issues}
+        result = model.check(args["path"])
         return [_text(result)], not result["ok"]
     if name == "build_cv":
         result = build.build(args["path"], lang=args.get("lang"), template=args.get("template"),
@@ -87,8 +84,7 @@ def call_tool(name: str, args: dict):
                 content.append(image)
         return content, not result["ok"]
     if name == "list_templates":
-        return [_text([{"name": m.NAME, "description": m.DESCRIPTION, "languages": sorted(m.LABELS)}
-                       for m in TEMPLATES.values()])], False
+        return [_text(catalog())], False
     if name == "get_schema":
         return [{"type": "text", "text": SCHEMA_PATH.read_text(encoding="utf-8")}], False
     raise model.CVError("Unknown tool: %s" % name)
@@ -99,6 +95,7 @@ def handle(msg: dict):
     if mid is None:
         return None  # notification (e.g. notifications/initialized)
     if method == "initialize":
+        # Accept the client's protocol version: the few methods used here are the same in all of them.
         version = (msg.get("params") or {}).get("protocolVersion") or "2025-06-18"
         result = {"protocolVersion": version, "capabilities": {"tools": {}},
                   "serverInfo": {"name": "cvfacile", "version": __version__}}
