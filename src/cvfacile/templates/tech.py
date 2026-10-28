@@ -2,7 +2,7 @@
 """Developer look: monospace accents, Markdown-like headings, skills as tags."""
 from __future__ import annotations
 
-from .common import LABELS, Context, columns, document  # noqa: F401
+from .common import LABELS, Context, columns, document  # noqa: F401  (LABELS is part of the template API)
 
 NAME = "tech"
 DESCRIPTION = "Developer look: monospace accents, Markdown-like headings, skills shown as tags. No photo."

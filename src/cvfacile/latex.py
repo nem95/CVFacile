@@ -32,6 +32,7 @@ def escape(text: str) -> str:
 
 
 def escape_url(url: str) -> str:
+    """Escape a URL for \\href: hyperref handles the other special characters itself."""
     return str(url).replace("\\", "").replace("%", r"\%").replace("#", r"\#")
 
 

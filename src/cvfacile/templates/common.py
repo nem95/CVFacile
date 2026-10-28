@@ -94,6 +94,7 @@ def contacts(b: dict) -> list:
         value = b.get(key)
         if not value:
             continue
+        # A bare handle ("jdoe") is turned into a profile URL; a domain or URL is kept as given.
         url = value if "://" in value or "." in value.split("/")[0] else "https://" + host + value
         if "://" not in url:
             url = "https://" + url

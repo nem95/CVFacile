@@ -2,7 +2,7 @@
 """Dense single column with small margins: fits a lot on one page."""
 from __future__ import annotations
 
-from .common import LABELS, Context, document  # noqa: F401
+from .common import LABELS, Context, document  # noqa: F401  (LABELS is part of the template API)
 
 NAME = "compact"
 DESCRIPTION = "Dense single column with small margins, for long careers. Libertinus serif. No photo."

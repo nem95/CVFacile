@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from ..latex import escape
-from .common import LABELS, Context, document, photo_circle  # noqa: F401
+from .common import LABELS, Context, document, photo_circle  # noqa: F401  (LABELS is part of the template API)
 
 NAME = "dark"
 DESCRIPTION = "Dark sidebar on the right (photo, contact, skills), bright accent color. Lato."

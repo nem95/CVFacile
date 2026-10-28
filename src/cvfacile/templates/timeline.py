@@ -2,7 +2,7 @@
 """Experience shown as a vertical timeline, dates in the left margin."""
 from __future__ import annotations
 
-from .common import LABELS, Context, document, photo_circle  # noqa: F401
+from .common import LABELS, Context, document, photo_circle  # noqa: F401  (LABELS is part of the template API)
 
 NAME = "timeline"
 DESCRIPTION = "Experience as a vertical timeline with dates in the margin. Fira Sans, optional photo."

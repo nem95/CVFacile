@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from ..latex import escape
-from .common import LABELS, Context, document  # noqa: F401
+from .common import LABELS, Context, document  # noqa: F401  (LABELS is part of the template API)
 
 NAME = "elegant"
 DESCRIPTION = "Centered layout, small caps and EB Garamond, ornamental section rules. No photo."

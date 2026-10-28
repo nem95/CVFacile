@@ -2,7 +2,7 @@
 """Swiss-style: section titles in a left column, lots of white space, no icons."""
 from __future__ import annotations
 
-from .common import LABELS, Context, document  # noqa: F401
+from .common import LABELS, Context, document  # noqa: F401  (LABELS is part of the template API)
 
 NAME = "minimal"
 DESCRIPTION = "Swiss style: section titles in the margin, lots of white space, almost no color. Roboto. No photo."

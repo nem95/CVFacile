@@ -2,7 +2,7 @@
 """Photo header, then two columns split by a thin rule. Section titles as colored tags."""
 from __future__ import annotations
 
-from .common import LABELS, Context, document, paracol, photo_circle  # noqa: F401
+from .common import LABELS, Context, document, paracol, photo_circle  # noqa: F401  (LABELS is part of the template API)
 
 NAME = "banner"
 DESCRIPTION = "Header with photo, two columns split by a thin rule, section titles as colored tags. Roboto."

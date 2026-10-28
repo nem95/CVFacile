@@ -2,7 +2,7 @@
 """Full-width colored header band, then a main column and a side column."""
 from __future__ import annotations
 
-from .common import LABELS, Context, document, paracol, photo_circle  # noqa: F401
+from .common import LABELS, Context, document, paracol, photo_circle  # noqa: F401  (LABELS is part of the template API)
 
 NAME = "modern"
 DESCRIPTION = "Colored header band with photo, main column and side column. Source Sans."
