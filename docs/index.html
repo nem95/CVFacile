@@ -29,6 +29,9 @@
 <link rel="preload" href="assets/fonts/league-gothic.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/inter.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/site.css">
+<meta name="posthog-key" content="__POSTHOG_KEY__">
+<meta name="posthog-host" content="__POSTHOG_HOST__">
+<script src="assets/analytics.js" defer></script>
 <script>
   // Entrance animations only when the visitor accepts motion.
   if (!matchMedia("(prefers-reduced-motion: reduce)").matches && "IntersectionObserver" in window) {
@@ -456,6 +459,11 @@
   </div>
   <img id="viewer-img" alt="">
 </dialog>
+
+<div id="consent" class="consent" role="region" aria-label="Cookies" hidden>
+  <p>We measure visits without cookies. Accept cookies to help us recognize returning visitors.</p>
+  <div class="consent-actions"><button type="button" class="btn solid" data-consent="granted">Accept</button><button type="button" class="btn alt" data-consent="denied">Decline</button></div>
+</div>
 
 <script src="assets/site.js" defer></script>
 </body>
